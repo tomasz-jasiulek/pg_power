@@ -12,7 +12,7 @@ module PgPower::SchemaDumper::SchemaMethods
   # * Dumps tables from public schema using native #tables method.
   # * Dumps tables from schemas other than public.
   def tables_with_schemas(stream)
-    tables_without_schemas(stream)
+    public_schema_tables(stream)
     non_public_schema_tables(stream)
   end
 
@@ -33,6 +33,18 @@ module PgPower::SchemaDumper::SchemaMethods
   end
   private :schema
 
+  # Dumps tables from public schema
+  def public_schema_tables(stream)
+    get_public_schema_table_names.each do |name|
+      begin
+        table(name, stream)
+      rescue ::ActiveRecord::InsufficientPrivilege => exc
+        with_warnings(false) { warn("#{exc.class.name}: #{exc.message}. Skipping #{name.inspect}...") }
+      end
+    end
+  end
+  private :public_schema_tables
+
   # Dumps tables from schemas other than public
   def non_public_schema_tables(stream)
     get_non_public_schema_table_names.each do |name|
@@ -45,9 +57,21 @@ module PgPower::SchemaDumper::SchemaMethods
   end
   private :non_public_schema_tables
 
-  # Returns a sorted list of non-public schema tables
+  # Returns a sorted list of public schema tables
   # Usage:
-  #   get_non_public_schema_table_names # => ['demography.cities','demography.countries','politics.members']
+  #   get_public_schema_table_names # => ['public.cities','public.countries','public.members']
+
+  def get_public_schema_table_names
+    result = @connection.query(<<-SQL, 'SCHEMA')
+      SELECT schemaname || '.' || tablename
+      FROM pg_tables
+      WHERE schemaname IN ('public')
+      ORDER BY schemaname, tablename
+    SQL
+    result.flatten
+  end
+  private :get_public_schema_table_names
+
   def get_non_public_schema_table_names
     result = @connection.query(<<-SQL, 'SCHEMA')
       SELECT schemaname || '.' || tablename
