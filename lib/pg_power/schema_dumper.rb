@@ -20,10 +20,19 @@ module PgPower::SchemaDumper
   included do
     alias_method_chain :header, :schemas
     alias_method_chain :header, :extensions
+    alias_method_chain :extensions, :metadata
 
     alias_method_chain :tables, :schemas
     alias_method_chain :tables, :views
     alias_method_chain :tables, :comments
     alias_method_chain :tables, :foreign_keys
+
+    def dump(stream)
+      header(stream)
+      tables(stream)
+      trailer(stream)
+      stream
+    end
+
   end
 end

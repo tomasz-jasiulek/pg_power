@@ -4,6 +4,11 @@ module PgPower::SchemaDumper::ExtensionMethods
   # schemas except for pg_catalog.
   def header_with_extensions(stream)
     header_without_extensions(stream)
+    extensions_with_metadata(stream)
+    stream
+  end
+
+  def extensions_with_metadata(stream)
     dump_extensions(stream)
     stream
   end

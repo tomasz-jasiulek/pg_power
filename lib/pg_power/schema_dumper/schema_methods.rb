@@ -35,9 +35,12 @@ module PgPower::SchemaDumper::SchemaMethods
 
   # Dumps tables from public schema
   def public_schema_tables(stream)
+    ignored_tables = ['schema_migrations', ignore_tables].flatten.map do |table|
+      table.starts_with?('public.') ? table : "public.#{table}"
+    end
     get_public_schema_table_names.each do |name|
       begin
-        table(name, stream)
+        table(name, stream) unless remove_prefix_and_suffix(name).in?(ignored_tables)
       rescue ::ActiveRecord::InsufficientPrivilege => exc
         with_warnings(false) { warn("#{exc.class.name}: #{exc.message}. Skipping #{name.inspect}...") }
       end

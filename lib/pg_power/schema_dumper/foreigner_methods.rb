@@ -3,12 +3,14 @@
 module PgPower::SchemaDumper::ForeignerMethods
   # Hooks ActiveRecord::SchemaDumper#table method to dump foreign keys.
   def tables_with_foreign_keys(stream)
-    tables_without_foreign_keys(stream)
+    tables_with_schemas(stream)
 
-    table_names = @connection.tables.sort
+    table_names = get_public_schema_table_names
+                    .concat(get_non_public_schema_table_names)
+                    .uniq
 
     table_names.sort.each do |table|
-      next if ['schema_migrations', ignore_tables].flatten.any? do |ignored|
+      next if ['public.schema_migrations', ignore_tables].flatten.any? do |ignored|
         case ignored
         when String; table == ignored
         when Regexp; table =~ ignored
