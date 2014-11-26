@@ -8,7 +8,7 @@ describe PgPower::ConnectionAdapters::PostgreSQLAdapter::ForeignerMethods do
   let(:adapter_stub) { PostgreSQLAdapter.new }
 
   it ".supports_foreign_keys?" do
-    expect(adapter_stub.supports_foreign_keys?).to be_true
+    expect(adapter_stub.supports_foreign_keys?).to be_truthy
   end
 
   describe ".drop_table" do

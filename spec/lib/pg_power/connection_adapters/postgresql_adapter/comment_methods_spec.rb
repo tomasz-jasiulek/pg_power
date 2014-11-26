@@ -9,7 +9,7 @@ describe PgPower::ConnectionAdapters::PostgreSQLAdapter::CommentMethods do
     let(:adapter_stub) { PostgreSQLAdapter.new }
 
     it ".supports_comments?" do
-      expect(adapter_stub.supports_comments?).to be_true
+      expect(adapter_stub.supports_comments?).to be_truthy
     end
   end
 

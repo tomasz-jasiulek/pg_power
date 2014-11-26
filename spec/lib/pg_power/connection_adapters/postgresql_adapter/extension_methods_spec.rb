@@ -8,7 +8,7 @@ describe PgPower::ConnectionAdapters::PostgreSQLAdapter::ExtensionMethods do
   let(:adapter_stub) { PostgreSQLAdapter.new }
 
   it ".supports_extensions?" do
-    expect(adapter_stub.supports_extensions?).to be_true
+    expect(adapter_stub.supports_extensions?).to be_truthy
   end
 
   it ".create_extension" do
