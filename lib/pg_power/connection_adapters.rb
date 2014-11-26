@@ -4,6 +4,7 @@ module PgPower::ConnectionAdapters # :nodoc:
   autoload :AbstractAdapter
   autoload :PostgreSQLAdapter, 'pg_power/connection_adapters/postgresql_adapter'
   autoload :Table
+  autoload :TableDefinition
   autoload :ForeignKeyDefinition
   autoload :IndexDefinition, 'pg_power/connection_adapters/index_definition'
 end

@@ -32,8 +32,12 @@ module PgPower
           include ::PgPower::CreateIndexConcurrently::MigrationProxy
         end
 
-        ActiveRecord::ConnectionAdapters::Table.module_eval do
+        ActiveRecord::ConnectionAdapters::Table.class_eval do
           include ::PgPower::ConnectionAdapters::Table
+        end
+
+        ActiveRecord::ConnectionAdapters::TableDefinition.class_eval do
+          include ::PgPower::ConnectionAdapters::TableDefinition
         end
 
         ActiveRecord::ConnectionAdapters::AbstractAdapter.module_eval do
