@@ -5,7 +5,7 @@
 # stub: pg_power 2.0.3 ruby lib
 
 Gem::Specification.new do |s|
-  s.name = "pg_power"
+  s.name = "tsh_pg_power"
   s.version = "2.0.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
